@@ -13,3 +13,9 @@ resource "aws_instance" "app_server" {
     Name = "ExampleAppServerInstance"
   }
 }
+
+resource "aws_s3_bucket" "demos3" {
+    bucket = "cq-bucket-20230519" 
+    acl = "private"   
+}
+
