@@ -14,8 +14,20 @@ resource "aws_instance" "app_server" {
   }
 }
 
-resource "aws_s3_bucket" "demos3" {
-    bucket = "cq-bucket-20230519" 
-    acl = "private"   
+resource "aws_s3_bucket" "bronzeBucket" {
+    bucket = "cq-bucket-bronze" 
 }
 
+resource "aws_s3_bucket_ownership_controls" "bronzeBucket" {
+  bucket = aws_s3_bucket.bronzeBucket.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "example" {
+  depends_on = [aws_s3_bucket_ownership_controls.bronzeBucket]
+
+  bucket = aws_s3_bucket.bronzeBucket.id
+  acl    = "private"
+}
