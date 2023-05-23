@@ -10,11 +10,3 @@ variable "bucket_list" {
   type        = list(any)
   default     = ["bronze", "silver", "gold"]
 }
-
-
-variable "bucket_suffix_str" {
-  description = "bucket name prefix"
-  type        = string
-  default     = "bronze"
-
-}
