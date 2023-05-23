@@ -1,18 +1,22 @@
 
-resource "aws_s3_bucket" "bronzeBucket" {
-  bucket = "cq-bucket-bronze"
+
+resource "aws_s3_bucket" "dataBuckets" {
+  count = length(var.bucket_list)
+  bucket = "${var.bucket_prefix}${var.bucket_list[count.index]}"
 }
 
-resource "aws_s3_bucket_ownership_controls" "bronzeBucket" {
-  bucket = aws_s3_bucket.bronzeBucket.id
+resource "aws_s3_bucket_ownership_controls" "dataBuckets" {
+  count = length(var.bucket_list)
+  bucket = aws_s3_bucket.dataBuckets[count.index].bucket
   rule {
     object_ownership = "BucketOwnerPreferred"
   }
 }
 
-resource "aws_s3_bucket_acl" "bronzeBucket" {
-  depends_on = [aws_s3_bucket_ownership_controls.bronzeBucket]
+resource "aws_s3_bucket_acl" "dataBuckets" {
+  count = length(var.bucket_list)
+  depends_on = [aws_s3_bucket_ownership_controls.dataBuckets]
 
-  bucket = aws_s3_bucket.bronzeBucket.id
+  bucket = aws_s3_bucket.dataBuckets[count.index].bucket
   acl    = "private"
 }
